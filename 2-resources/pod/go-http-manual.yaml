@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: go-http-from-yml
+  labels: # if didn't gave lable into pod you can't expose because there is no selector for that pod
+    creation_method: manual
+    env: local
+spec:
+  containers:
+    - image: manouchehrrasouli96/golang-http-server:0.0.1
+      name: go-http-from-yml
+      ports:
+        - containerPort: 9999
+          protocol: TCP
