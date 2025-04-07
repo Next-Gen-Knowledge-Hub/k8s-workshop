@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: http-server-healthcheck-deployment
+spec:
+  replicas: 3 # replicate service
+  selector:
+    matchLabels:
+      app: http-server-healthcheck-deployment
+  template:
+    metadata:
+      labels:
+        app: http-server-healthcheck-deployment
+    spec:
+      containers:
+        - image: manouchehrrasouli96/http-server-healthcheck:0.0.1
+          name: http-server-healthcheck
+          livenessProbe: # define liveness probe for deployment
+            httpGet:
+              path: /healthcheck
+              port: 8989
+          ports:
+            - containerPort: 8989
+              protocol: TCP

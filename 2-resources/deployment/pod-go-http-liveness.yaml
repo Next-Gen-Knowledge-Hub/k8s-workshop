@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: go-http-liveness
+spec:
+  containers:
+    - image: manouchehrrasouli96/http-server-healthcheck:0.0.1
+      name: go-http-liveness
+      livenessProbe:
+        httpGet:
+          path: /healthcheck
+          port: 8989
+      ports:
+        - containerPort: 8989
+          protocol: TCP
