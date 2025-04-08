@@ -15,7 +15,7 @@ Repository contains following topics
     - 2.1 [Pod](./2-resources/pod/README.md)
     - 2.2 [Deployments And Replication Set](./2-resources/deployment/README.md)
     - 2.3 [Service](./2-resources/service/README.md)
-    - 2.4 Volume
+    - 2.4 [Volume](./2-resources/volume/README.md)
     - 2.5 Config Map
     - 2.6 Secret
     - 2.7 Stateful Set
