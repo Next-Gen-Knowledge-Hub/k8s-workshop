@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: log-mount-deployment
+  labels:
+    app: log-mount-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: log-mount-example
+  template:
+    metadata:
+      name: log-mount-example
+      labels:
+        app: log-mount-example
+    spec:
+      containers:
+        - name: log-mount-sever
+          image: manouchehrrasouli96/log-server:v0.4
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - mountPath: /tmp/
+              name: log-volume
+          ports:
+            - containerPort: 8888
+        - name: log-mount-collector
+          image: manouchehrrasouli96/log-collector:v0.1
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - mountPath: /tmp/
+              name: log-volume
+      volumes:
+        - name: log-volume
+          emptyDir: { }
