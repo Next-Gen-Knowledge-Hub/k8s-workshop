@@ -127,8 +127,75 @@ Example Output from Collector:
 
 ---
 
+# 💾 Using Persistent Storage in Kubernetes
+
+There are situations where an application **must retain data** even after the pod it’s running in is terminated or rescheduled. For such cases, simple volumes like `emptyDir` or `hostPath` won’t work because their lifecycle is tied to the pod or the node. Instead, we need **persistent storage** that can outlive pods and be **accessible across different nodes** in the cluster.
+
+---
+
+## 3 - Using Persistent Storage
+
+When a pod requires data **persistence across restarts or rescheduling**, it must rely on **network-attached storage (NAS)** or **cluster-managed storage systems** that are independent of pod or node lifecycle.
+
+A common use case is deploying a database like **MongoDB** with data persistence.
+
+```bash
+# Create a PersistentVolume, PersistentVolumeClaim, and MongoDB deployment
+kubectl create -f k8s_persitstant_volume.yaml
+```
+
+> 💡 This configuration uses a **Persistent Volume (PV)** backed by local disk or external storage to ensure that MongoDB’s data is retained across pod restarts.
+
+---
+
+## 4 - Decoupling Pods from the Underlying Storage Technology
+
+Early approaches to storage in Kubernetes required **developers to understand** the cluster's underlying storage infrastructure. This tightly coupled applications to specific technologies and limited flexibility.
+
+### 🧱 The Problem
+Imagine needing to update from NFS to CSI-based cloud storage—you’d have to modify every pod definition that used it. That's not scalable.
+
+---
+
+## 4.1 - PersistentVolumes (PV) & PersistentVolumeClaims (PVC)
+
+To solve this, Kubernetes introduces **two abstractions**:
+
+| Resource              | Purpose |
+|-----------------------|---------|
+| **PersistentVolume (PV)** | Represents a piece of storage provisioned by an administrator. Think of it as the "supply" side of storage. |
+| **PersistentVolumeClaim (PVC)** | A user's request for storage. Defines how much space and which access modes are required. It's the "demand" side. |
+
+```bash
+# Apply a manifest that includes both PV and PVC resources
+kubectl create -f k8s_persitstant_volume.yaml
+
+# View the available persistent volumes
+kubectl get persistentvolume
+
+# View the claims made by the user/application
+kubectl get persistentvolumeclaims
+```
+
+### 🛠️ How It Works
+
+1. **Cluster Admin** creates one or more PersistentVolumes (PV):
+    - Specifies size, access modes, and backend storage type (e.g., NFS, local, cloud disk).
+2. **Developer/User** creates a PersistentVolumeClaim (PVC):
+    - Requests a specific amount of storage and access mode (e.g., `ReadWriteOnce`).
+3. **Kubernetes Controller** matches a PVC to an appropriate PV and **binds them**.
+4. The pod can then **mount the PVC** as a volume.
+
+> 🎯 **Goal:** Developers don’t have to worry about storage provisioning—they simply ask for it, and Kubernetes handles the rest.
+
+---
+
 ## 📌 Summary
 
+- For persistent storage, use **PersistentVolumes (PV)** and **PersistentVolumeClaims (PVC)**.
+- These abstractions **decouple storage configuration from pod definitions**, making applications portable and reusable.
+- Storage can be **manually provisioned** by admins or **dynamically provisioned** using StorageClasses.
+- Once a claim is bound, the pod can safely write and read data from the mounted volume—even across node failures or restarts.
 - Kubernetes **Volumes** allow **data sharing** between containers or **persistent storage** across pod restarts.
 - The simplest volume type, **`emptyDir`**, is great for intra-pod communication.
 - Many **advanced volume types** (like `PVC`, `CSI`, or cloud-specific options) enable long-term, scalable storage.
