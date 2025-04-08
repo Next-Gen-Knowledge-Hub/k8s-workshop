@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-http-deployment
+  labels:
+    app: go-http-deployment-kind
+    creation_method: deployment
+    env: local
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: go-http-pod # this label will be used in service to select that deployment
+  template:
+    metadata:
+      labels:
+        app: go-http-pod
+    spec:
+      containers:
+        - name: go-http-name-container-name
+          image: manouchehrrasouli96/golang-http-server:0.0.1
+          ports:
+            - name: http
+              containerPort: 9999
+              protocol: TCP
