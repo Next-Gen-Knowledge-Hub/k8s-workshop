@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: env-server
+  labels:
+    app: env-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: env-server
+  template:
+    metadata:
+      name: env-server
+      labels:
+        app: env-server
+    spec:
+      containers:
+        - name: env-server
+          image: manouchehrrasouli96/env-server:v0.1
+          env:
+            - name: PORT
+              value: "1818"
+            - name: STAGE
+              value: "k8s-deployment"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 1818
+              protocol: TCP
+      restartPolicy: Always
+      

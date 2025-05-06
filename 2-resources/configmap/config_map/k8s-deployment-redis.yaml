@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+        - name: redis
+          image: redis:latest
+          command: ["redis-server", "/usr/local/etc/redis/redis.conf"] # Use custom config
+          volumeMounts:
+            - name: redis-config-volume
+              mountPath: /usr/local/etc/redis
+              subPath: redis.conf
+              readOnly: true
+      volumes:
+        - name: redis-config-volume
+          configMap:
+            name: redis-config

@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: env-server-config
+data:
+  APP_PORT: "1819"
+  APP_STAGE: "k8s-pro"

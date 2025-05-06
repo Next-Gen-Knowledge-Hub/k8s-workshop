@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: arg-server
+  labels:
+    app: arg-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: arg-server
+  template:
+    metadata:
+      name: arg-server
+      labels:
+        app: arg-server
+    spec:
+      containers:
+        - name: arg-server
+          image: manouchehrrasouli96/arg-server:v0.1
+          args:
+            - "arg1"
+            - "arg2"
+            - "arg3"
+            - "k8s-rocks"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+      restartPolicy: Always
