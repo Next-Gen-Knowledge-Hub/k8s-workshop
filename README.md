@@ -17,7 +17,7 @@ Repository contains following topics
     - 2.3 [Service](./2-resources/service/README.md)
     - 2.4 [Volume](./2-resources/volume/README.md)
     - 2.5 [Config Map](./2-resources/configmap/README.md)
-    - 2.6 Secret
+    - 2.6 [Secret](./2-resources/secret/README.md)
     - 2.7 Stateful Set
     - 2.8 Daemon Set, Job, Cronjob
     - 2.9 Internals
